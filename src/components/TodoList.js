@@ -4,9 +4,10 @@ import TodoItem from "./TodoItem";
 
 
 let TodoList = (props) => {
+  const {items, ...otherProps} = props;
   return (
     <ul>
-      {props.items.map(todo => <TodoItem  key={todo.id} todo={todo} handleClick={props.handleClickTodo}/>)}
+      {props.items.map(todo => <TodoItem  key={todo.id} todo={todo} {...otherProps}/>)}
     </ul>
   );
 };
@@ -19,5 +20,6 @@ TodoList.PropTypes = {
     text: PropTypes.string,
     isComplete: PropTypes.bool
   })),
-  handleClickTodo: PropTypes.func
+  handleClickTodo: PropTypes.func.isRequired,
+  handleRemoveTodo: PropTypes.func.isRequired
 };

@@ -26,6 +26,12 @@ class App extends Component {
     })
   }
 
+  handleRemoveTodo(todo) {
+    this.setState({
+      todos: this.state.todos.filter(td => td.id !==todo.id)
+    });
+  }
+
   updateTodo(newTodo) {
     return this.state.todos.map((td) => {
       if (td.id !== newTodo.id) {
@@ -42,7 +48,10 @@ class App extends Component {
     return (
       <div>
         <AddTodo handleAddTodo={this.handleAddTodo.bind(this)}/>
-        <TodoList items={this.state.todos} handleClickTodo={this.handleClickTodo.bind(this)}/>
+        <TodoList items={this.state.todos}
+                  handleClickTodo={this.handleClickTodo.bind(this)}
+                  handleRemoveTodo={this.handleRemoveTodo.bind(this)}
+        />
       </div>
     );
   }
