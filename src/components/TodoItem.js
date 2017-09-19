@@ -12,10 +12,13 @@ const normal = {
 };
 
 let TodoItem = (props) => {
-  const {todo, handleClick} = props;
+  const {todo, handleClickTodo, handleRemoveTodo} = props;
   return (
-    <li style={todo.isComplete ? line_through : normal} onClick={() => handleClick(todo)}>
-    {todo.text}
+    <li>
+      <span style={todo.isComplete ? line_through : normal} onClick={() => handleClickTodo(todo)}>
+        {todo.text}
+      </span><span>  </span>
+      <button onClick={() => handleRemoveTodo(todo)}>Remove</button>
     </li>
   );
 };
@@ -28,5 +31,6 @@ TodoItem.PropTypes = {
     text: PropTypes.string,
     isComplete: PropTypes.bool
   }).isRequired,
-  handleClick: PropTypes.func.isRequired
+  handleClickTodo: PropTypes.func.isRequired,
+  handleRemoveTodo: PropTypes.func.isRequired
 };
