@@ -8,12 +8,10 @@ class AddTodo extends React.Component {
   }
 
   handleChange(e) {
-    console.log(e.target.value);
     this.setState({input: e.target.value});
   }
 
   handleSubmit() {
-    console.log(this.state.input);
     this.props.handleAddTodo(this.state.input);
     this.refs.todoInput.value = '';
   }
