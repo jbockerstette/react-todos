@@ -3,51 +3,33 @@ import './scss/App.css';
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
 import TodoFilter from "./components/TodoFilter";
+import {addTodo, removeTodo, toggleTodo} from "./actions/todoActions";
+import {setFilter} from "./actions/filterActions";
+
+let nextId = 0;
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.nextId = 0;
-    this.state = {
-      todos: [],
-      filter: TodoFilter.SHOW_ALL
-    }
   }
 
   handleAddTodo(todoText) {
-    const todo = {id: this.nextId++, text: todoText, isComplete: false};
-    this.setState({todos: [...this.state.todos, todo]});
+    this.props.store.dispatch(addTodo(nextId++, todoText));
   }
 
   handleClickTodo(todo) {
-    console.log(todo);
-    const updatedTodo = Object.assign({}, todo, {isComplete: !todo.isComplete});
-    this.setState({
-      todos: this.updateTodo(updatedTodo)
-    })
+    this.props.store.dispatch(toggleTodo(todo.id));
   }
 
   handleRemoveTodo(todo) {
-    this.setState({
-      todos: this.state.todos.filter(td => td.id !== todo.id)
-    });
+    this.props.store.dispatch(removeTodo(todo.id));
   }
 
-  updateTodo(newTodo) {
-    return this.state.todos.map((td) => {
-      if (td.id !== newTodo.id) {
-        return td;
-      }
-      return {
-        ...td,
-        ...newTodo
-      }
-    });
-  }
 
   getFilteredTodos() {
+    const state = this.props.store.getState();
     let todoFilter;
-    switch (this.state.filter) {
+    switch (state.filter) {
       case TodoFilter.SHOW_ALL:
         todoFilter = todo => todo;
         break;
@@ -60,16 +42,15 @@ class App extends Component {
       default:
         todoFilter = todo => todo;
     }
-    return this.state.todos.filter(todoFilter);
+    return state.todos.filter(todoFilter);
   }
 
   handleFilter(filter) {
-    this.setState({
-      filter
-    });
+    this.props.store.dispatch(setFilter(filter));
   }
 
   render() {
+    const state = this.props.store.getState();
     return (
       <div>
         <AddTodo handleAddTodo={this.handleAddTodo.bind(this)}/>
@@ -78,7 +59,7 @@ class App extends Component {
                   handleRemoveTodo={this.handleRemoveTodo.bind(this)}
         />
         <TodoFilter handleFilter={this.handleFilter.bind(this)}
-                    filter={this.state.filter}/>
+                    filter={state.filter}/>
       </div>
     );
   }
