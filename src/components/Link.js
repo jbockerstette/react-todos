@@ -2,11 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types';
 
 
-let Link = (props) => {
+let Link = ({
+  isActive,
+  onClick,
+  children
+}) => {
   return (
-    <span onClick={props.onClick}>
-      <span  style={props.isActive ? {textDecoration:"none"}: {textDecoration:"underline"}}>
-        {props.children}
+    <span onClick={onClick}>
+      <span  style={isActive ? {textDecoration:"none"}: {textDecoration:"underline"}}>
+        {children}
       </span>
       <span> </span>
     </span>

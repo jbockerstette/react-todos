@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types';
 
 
-let MyButton = (props) => {
-  const {title, onClick} = props;
+let MyButton = ({title, onClick}) => {
   return (
     <button onClick={onClick}>{title}</button>
   );

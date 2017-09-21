@@ -1,25 +1,57 @@
 import React from 'react'
-import PropTypes from 'prop-types';
 import TodoItem from "./TodoItem";
+import {store} from "../index";
+import {removeTodo, toggleTodo} from "../actions/todoActions";
+import TodoFilter from "./TodoFilter";
+
+class TodoList extends React.Component {
+
+  componentDidMount() {
+    this.unsubsribe = store.subscribe(() => this.forceUpdate())
+  }
+
+  componentWillUnmount() {
+    this.unsubsribe();
+  }
+
+  handleClickTodo(todo) {
+    store.dispatch(toggleTodo(todo.id));
+  }
+
+  handleRemoveTodo(todo) {
+    store.dispatch(removeTodo(todo.id));
+  }
 
 
-let TodoList = (props) => {
-  const {items, handleClickTodo, ...otherProps} = props;
-  return (
-    <ul>
-      {items.map(todo => <TodoItem  onClick={() => handleClickTodo(todo)} key={todo.id} todo={todo} {...otherProps}/>)}
-    </ul>
-  );
-};
+  getFilteredTodos() {
+    const state = store.getState();
+    let todoFilter;
+    switch (state.filter) {
+      case TodoFilter.SHOW_ALL:
+        todoFilter = todo => todo;
+        break;
+      case TodoFilter.SHOW_COMPLETE:
+        todoFilter = (todo) => todo.isComplete;
+        break;
+      case TodoFilter.SHOW_NOT_COMPLETE:
+        todoFilter = (todo) => !todo.isComplete;
+        break;
+      default:
+        todoFilter = todo => todo;
+    }
+    return state.todos.filter(todoFilter);
+  }
+
+  render() {
+    const todos = this.getFilteredTodos();
+    return (
+      <ul>
+        {todos.map(todo => <TodoItem onClick={() => this.handleClickTodo(todo)} key={todo.id}
+                                     todo={todo} handleRemoveTodo={this.handleRemoveTodo.bind(this)}/>)}
+      </ul>
+    );
+  }
+}
 
 export default TodoList;
 
-TodoList.PropTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number,
-    text: PropTypes.string,
-    isComplete: PropTypes.bool
-  })),
-  handleClickTodo: PropTypes.func.isRequired,
-  handleRemoveTodo: PropTypes.func.isRequired
-};

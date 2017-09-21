@@ -1,5 +1,8 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import {store} from '../index';
+import {addTodo} from "../actions/todoActions";
+
+let nextId = 0;
 
 class AddTodo extends React.Component {
   constructor(props) {
@@ -7,12 +10,25 @@ class AddTodo extends React.Component {
     this.state = {input: ''};
   }
 
+  componentDidMount() {
+    this.unsubsribe = store.subscribe(() => this.forceUpdate())
+  }
+
+  componentWillUnmount() {
+    this.unsubsribe();
+  }
+
+  handleAddTodo(todoText) {
+    store.dispatch(addTodo(nextId++, todoText));
+  }
+
+
   handleChange(e) {
     this.setState({input: e.target.value});
   }
 
   handleSubmit() {
-    this.props.handleAddTodo(this.state.input);
+    this.handleAddTodo(this.state.input);
     this.refs.todoInput.value = '';
   }
 
@@ -27,9 +43,6 @@ class AddTodo extends React.Component {
   }
 }
 
-AddTodo.PropTypes = {
-  handleAddTodo: PropTypes.func,
-};
 
 export default AddTodo;
 

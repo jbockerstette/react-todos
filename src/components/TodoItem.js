@@ -12,8 +12,7 @@ const normal = {
   textDecoration: ""
 };
 
-let TodoItem = (props) => {
-  const {todo, onClick, handleRemoveTodo} = props;
+let TodoItem = ({todo, onClick, handleRemoveTodo}) => {
   return (
     <li>
       <span style={todo.isComplete ? line_through : normal} onClick={onClick}>
@@ -32,6 +31,5 @@ TodoItem.PropTypes = {
     text: PropTypes.string,
     isComplete: PropTypes.bool
   }).isRequired,
-  handleClickTodo: PropTypes.func.isRequired,
   handleRemoveTodo: PropTypes.func.isRequired
 };
