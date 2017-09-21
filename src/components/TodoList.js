@@ -4,10 +4,10 @@ import TodoItem from "./TodoItem";
 
 
 let TodoList = (props) => {
-  const {items, ...otherProps} = props;
+  const {items, handleClickTodo, ...otherProps} = props;
   return (
     <ul>
-      {items.map(todo => <TodoItem  key={todo.id} todo={todo} {...otherProps}/>)}
+      {items.map(todo => <TodoItem  onClick={() => handleClickTodo(todo)} key={todo.id} todo={todo} {...otherProps}/>)}
     </ul>
   );
 };

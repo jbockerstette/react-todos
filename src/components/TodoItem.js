@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import MyButton from "./MyButton";
 
 
 //line through style
@@ -12,13 +13,13 @@ const normal = {
 };
 
 let TodoItem = (props) => {
-  const {todo, handleClickTodo, handleRemoveTodo} = props;
+  const {todo, onClick, handleRemoveTodo} = props;
   return (
     <li>
-      <span style={todo.isComplete ? line_through : normal} onClick={() => handleClickTodo(todo)}>
+      <span style={todo.isComplete ? line_through : normal} onClick={onClick}>
         {todo.text}
       </span><span>  </span>
-      <button onClick={() => handleRemoveTodo(todo)}>Remove</button>
+      <MyButton title={"Remove"} onClick={() => handleRemoveTodo(todo)}/>
     </li>
   );
 };
